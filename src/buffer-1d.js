@@ -1,4 +1,4 @@
-import _ = require('lodash');
+import _ from 'lodash';
 
 
 const ctor = Float32Array;
