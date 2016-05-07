@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.map = undefined;
+exports.each = exports.map = undefined;
 
 var _bufferNd = require('./buffer-nd');
 
@@ -43,6 +43,15 @@ function nListMap(nargs) {
     return new Function('fn', 'src', 'target', 'var len = (src[0] || target).length;\n' + 'for (var i = 0; i < len; i++)\n' + '  target[i] = fn(' + application + ');');
 };
 
+function nCall(nargs) {
+    var application = '';
+    for (var i = 0; i < nargs; i++) {
+        application += 'src[' + i + '][i]';
+        if (i !== nargs - 1) application += ', ';
+    }
+    return new Function('fn', 'src', 'var len = src[0].length;\n' + 'for (var i = 0; i < len; i++)\n' + '  fn(' + application + ');');
+}
+
 function map(src, fn, targ) {
     if (!Array.isArray(fn)) fn = [fn];
     if (_.isUndefined(targ)) targ = new _bufferNd2.default(fn.length, src.size());
@@ -51,4 +60,10 @@ function map(src, fn, targ) {
     return targ;
 }
 
+function each(src, fn) {
+    var compiled = nCall(fn.length);
+    compiled(fn, src.raw());
+}
+
 exports.map = map;
+exports.each = each;

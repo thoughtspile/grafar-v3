@@ -10,6 +10,10 @@ var _bufferNd2 = _interopRequireDefault(_bufferNd);
 
 var _transforms = require('./transforms');
 
+var _generators = require('./generators');
+
+var _combine = require('./combine');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var buff = new _buffer1d2.default();
@@ -40,3 +44,15 @@ var targ2d = new _bufferNd2.default(2, 3);
   return x * y;
 }], targ2d);
 console.log(targ2d.raw());
+
+var intSet = (0, _generators.ints)(0, 12);
+console.log(intSet, intSet.raw());
+
+var int2 = (0, _generators.ints)(0, 1);
+console.log(int2.raw());
+console.log((0, _combine.cart)(int2, int2, new _bufferNd2.default(2, 4)).raw());
+
+var sqr3 = (0, _combine.cart)(int2, int2, int2, new _bufferNd2.default(3, 8));
+(0, _transforms.each)(sqr3, function (x, y, z) {
+  return console.log(x, y, z);
+});

@@ -34,6 +34,19 @@ function nListMap(nargs) {
         '  target[i] = fn(' + application + ');');
 };
 
+function nCall(nargs) {
+    var application = '';
+    for (var i = 0; i < nargs; i++) {
+        application += 'src[' + i + '][i]';
+        if (i !== nargs - 1)
+            application += ', ';
+    }
+    return new Function('fn', 'src',
+        'var len = src[0].length;\n' +
+        'for (var i = 0; i < len; i++)\n' +
+        '  fn(' + application + ');');
+}
+
 
 function map(src, fn, targ) {
     if (!Array.isArray(fn))
@@ -45,7 +58,13 @@ function map(src, fn, targ) {
     return targ;
 }
 
+function each(src, fn) {
+    const compiled = nCall(fn.length);
+    compiled(fn, src.raw());
+}
+
 
 export {
-    map
+    map,
+    each
 };
