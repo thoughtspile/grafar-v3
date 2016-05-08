@@ -4,6 +4,8 @@ import { map, each } from './transforms';
 import { ints } from './generators';
 import { cart } from './combine';
 
+const log = console.log.bind(console);
+
 let buff = new Buffer1d();
 console.log(buff, buff.size());
 buff.size(3);
@@ -25,14 +27,18 @@ console.log(set1d.raw());
 
 let targ2d = new Set(2, 3);
 map(set2d, [(x, y) => x + y, (x, y) => x * y], targ2d);
+console.log('\nsum and product:');
 console.log(targ2d.raw());
 
-let intSet = ints(0, 12);
-console.log(intSet, intSet.raw());
+console.log('\n0..5')
+each(ints(0, 5), log);
 
 let int2 = ints(0, 1);
-console.log(int2.raw())
-console.log(cart(int2, int2, new Set(2, 4)).raw());
+console.log('\n{0, 1}')
+each(int2, log)
+console.log('\ndouble cube');
+each(cart(int2, int2, new Set(2, 4)), log);
 
+console.log('\ntriple cube')
 const sqr3 = cart(int2, int2, int2, new Set(3, 8));
-each(sqr3, (x, y, z) => console.log(x, y, z));
+each(sqr3, log);

@@ -59,7 +59,7 @@ function map(src, fn, targ) {
 }
 
 function each(src, fn) {
-    const compiled = nCall(fn.length);
+    const compiled = nCall(src.getDims());
     compiled(fn, src.raw());
 }
 
