@@ -6,6 +6,7 @@ import { cart } from './combine';
 
 const log = console.log.bind(console);
 
+
 let buff = new Buffer1d();
 console.log(buff, buff.size());
 buff.size(3);

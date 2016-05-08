@@ -1,5 +1,5 @@
 function prod(arr) {
-    return arr.reduce((acc, el) => acc * el, 1)
+    return arr.reduce((acc, el) => acc * el, 1);
 }
 
 function cart(...comps) {
@@ -9,7 +9,7 @@ function cart(...comps) {
     targ.size(resSize);
     let targData = targ.raw();
 
-    for (let iSet = 0, iComp = 0; iSet < srcData.length; iSet++) { // each multiplier
+    for (let iSet = 0, iComp = 0; iSet < comps.length; iSet++) { // each multiplier
         let rep = prod(comps.slice(0, iSet).map(c => c.size()));
         let stretch = prod(comps.slice(iSet + 1).map(c => c.size()));
         let compSize = comps[iSet].size();

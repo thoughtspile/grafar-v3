@@ -1,50 +1,43 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
 import Set from './buffer-nd';
 
 
-function compile(fns) {
+function compileMap(fns) {
     const dimIn = fns.length;
-    const compiled = fns.map(fn => wrapFn(fn));
+    const compiled = fns.map(fn => wrapFn(fn, nListMap));
 
-    return function(src, targ) {
-        for (var i = 0; i < dimIn; i++)
+    return (src, targ) => {
+        for (let i = 0; i < dimIn; i++)
             compiled[i](src, targ[i]);
     };
 }
 
-function wrapFn(fn) {
-    var nargfn = nListMap(fn.length);
-    var boundfn = function(src, target) {
-        nargfn(fn, src, target);
-    };
-    return boundfn;
+function compileEach(fn) {}
+
+function wrapFn(fn, compiler) {
+    const nargfn = nListMap(fn.length);
+    return (src, target) => nargfn(fn, src, target);
 };
 
+function repWithI(count, pattern, join = ',') {
+    return _.range(0, count)
+        .map(i => pattern(i))
+        .join(join);
+}
+
 function nListMap(nargs) {
-    var application = '';
-    for (var i = 0; i < nargs; i++) {
-        application += 'src[' + i + '][i]';
-        if (i !== nargs - 1)
-            application += ', ';
-    }
-    return new Function('fn', 'src', 'target',
+    return new Function(['fn', 'src', 'target'],
         'var len = (src[0] || target).length;\n' +
         'for (var i = 0; i < len; i++)\n' +
-        '  target[i] = fn(' + application + ');');
+        '  target[i] = fn(' + repWithI(nargs, i => `src[${i}][i]`, ',') + ');');
 };
 
 function nCall(nargs) {
-    var application = '';
-    for (var i = 0; i < nargs; i++) {
-        application += 'src[' + i + '][i]';
-        if (i !== nargs - 1)
-            application += ', ';
-    }
-    return new Function('fn', 'src',
+    return new Function(['fn', 'src'],
         'var len = src[0].length;\n' +
         'for (var i = 0; i < len; i++)\n' +
-        '  fn(' + application + ');');
+        '  fn(' + repWithI(nargs, i => `src[${i}][i]`, ',') + ');');
 }
 
 
@@ -53,7 +46,7 @@ function map(src, fn, targ) {
         fn = [fn];
     if (_.isUndefined(targ))
         targ = new Set(fn.length, src.size());
-    const compiled = compile(fn);
+    const compiled = compileMap(fn);
     compiled(src.raw(), targ.raw());
     return targ;
 }
