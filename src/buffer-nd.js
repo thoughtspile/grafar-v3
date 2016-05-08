@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import Buffer1d from './buffer-1d';
+import { map, each } from './transforms';
 
 
 class Set {
@@ -21,6 +22,13 @@ class Set {
     }
     raw() {
         return this._cols.map(col => col.raw());
+    }
+    map(fn, targ) {
+        return map(this, fn, targ);
+    }
+    each(fn) {
+        each(this, fn);
+        return this;
     }
 }
 

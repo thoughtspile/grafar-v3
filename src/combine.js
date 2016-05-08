@@ -1,12 +1,18 @@
+import _ from 'lodash';
+
+import Set from './buffer-nd';
+
+
 function prod(arr) {
     return arr.reduce((acc, el) => acc * el, 1);
 }
 
 
-function cart(...comps) {
-    let targ = comps.pop(); // TODO redim
-    let srcData = comps.map(comp => comp.raw());
-    const resSize = prod(comps.map(c => c.size()));
+function cart(comps, targ) {
+    if (_.isUndefined(targ))
+        targ = new Set(_(comps).invokeMap('getDims').sum());
+    let srcData = _.invokeMap(comps, 'raw');
+    const resSize = prod(_.invokeMap(comps, 'size'));
     targ.size(resSize);
     let targData = targ.raw();
 

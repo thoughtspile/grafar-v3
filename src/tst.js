@@ -39,16 +39,16 @@ console.log('\n\t{0, 1}')
 each(int2, log)
 
 console.log('\n\tdouble cube');
-each(cart(int2, int2, new Set(2, 4)), log);
+each(cart([int2, int2], new Set(2, 4)), log);
 
 console.log('\n\ttriple cube')
-const sqr3 = cart(int2, int2, int2, new Set(3, 8));
+const sqr3 = cart([int2, int2, int2], new Set(3, 8));
 each(sqr3, log);
 
 console.log('\n\titerative triple cube')
-const step1 = cart(int2, int2, new Set(2));
+const step1 = cart([int2, int2], new Set(2));
 console.log('\nstep 1')
 each(step1, log);
-const step2 = cart(step1, int2, new Set(3));
+const step2 = cart([step1, int2], new Set(3));
 console.log('\nstep 2')
 each(step2, log);
