@@ -18,6 +18,9 @@ class Buffer1d {
 
         return this;
     }
+    raw() {
+        return this._data;
+    }
 }
 
 

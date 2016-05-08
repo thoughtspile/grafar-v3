@@ -20,7 +20,7 @@ class Set {
         return this._cols.length;
     }
     raw() {
-        return this._cols.map(col => col._data);
+        return this._cols.map(col => col.raw());
     }
 }
 
