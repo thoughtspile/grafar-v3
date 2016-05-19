@@ -1,0 +1,15 @@
+- stateful generators: f(state) -> number
+    - how to go about nd-generators?
+- discrete filters: f(...) -> boolean
+    - implemented with mask
+    - optional shrinking on proceed
+- continuous filters: f(...) -> number
+    - adjusts the positions of border elements
+    - filters at 0+0
+- cuts: f(...) -> number
+    - cut edge if ends have different sign (0 is negative)
+- glue points together
+    - I have no idea of how to go about it
+- 0+0 is to support booleans
+- polyline optimization
+- mesh optimization
