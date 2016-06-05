@@ -7,7 +7,6 @@ function prod(arr) {
     return arr.reduce((acc, el) => acc * el, 1);
 }
 
-
 function cart(comps, targ) {
     if (_.isUndefined(targ))
         targ = new Set(_(comps).invokeMap('getDims').sum());
@@ -39,7 +38,20 @@ function cart(comps, targ) {
     return targ;
 }
 
+// shallow
+function zip(comps, targ) {
+    const dims = _.sum(_.map(comps, 'dims'));
+    const size = _.min(_.map(comps, 'size'));
+    if (!targ)
+        targ = new Set(dims);
+    targ._size = size;
+    _.flatten(_.map(comps, '_cols'))
+        .forEach((col, i) => { targ._cols[i] = col; });
+    return targ;
+}
+
 
 export {
-    cart
+    cart,
+    zip
 };

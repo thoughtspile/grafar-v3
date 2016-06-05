@@ -1,8 +1,8 @@
 import Buffer1d from './buffer-1d';
 import Set from './buffer-nd';
 import { map, each } from './transforms';
-import { ints } from './generators';
-import { cart } from './combine';
+import { ints, Generator } from './generators';
+import { cart, zip } from './combine';
 
 const log = console.log.bind(console);
 
@@ -20,11 +20,14 @@ console.log(set2d, set2d.size());
 set2d.size(3);
 console.log(set2d, set2d.size());
 
+let comp1 = new Generator(i => i + 1, 0).into(new Set(1, 3));
+let comp2 = new Generator(i => 10 * (i + 1), 0).into(new Set(1, 3));
+zip([comp1, comp2], set2d);
+console.log('zip: ', comp1.raw(), comp2.raw(), set2d.raw());
+
 let set1d = new Set(1, 3);
-set2d._cols[0]._data.set([1,2,3]);
-set2d._cols[1]._data.set([10,20,30]);
 map(set2d, (x, y) => x + y, set1d);
-console.log(set1d.raw());
+console.log('sum:', set1d.raw());
 
 let targ2d = new Set(2, 3);
 map(set2d, [(x, y) => x + y, (x, y) => x * y], targ2d);

@@ -13,3 +13,4 @@
 - 0+0 is to support booleans
 - polyline optimization
 - mesh optimization
+- nd maps via array return

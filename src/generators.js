@@ -19,7 +19,31 @@ function ints(start, end) {
     return res;
 }
 
+class Generator {
+    // fn(state) returns value or undefined
+    constructor(fn) {
+        this.fn = fn;
+    }
+    into(set) {
+        // TODO autoresize
+        // TODO autoredim
+        let raw = set.raw()[0];
+        let i = 0;
+        while (true) {
+            const output = this.fn(i);
+            if (output === undefined)
+                break;
+            raw[i] = output;
+            i++;
+            if (i >= raw.length)
+                break;
+        }
+        return set;
+    }
+}
+
 
 export {
-    ints
+    ints,
+    Generator
 };
