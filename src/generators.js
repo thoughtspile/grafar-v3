@@ -1,22 +1,14 @@
 import Set from './buffer-nd';
 
 
-function ints(start, end) {
+function ints(start, end, targ) {
     start = Math.ceil(start);
     end = Math.floor(end);
-    const count = Math.abs(end + 1 - start);
-
-    let res = new Set(1, count);
-    let data = res.raw()[0];
-
-    let val = start;
-    let inc = Math.sign(end - start);
-    for (let i = 0; i < count; i++) {
-        data[i] = val;
-        val += inc;
-    }
-
-    return res;
+    const size = Math.abs(end + 1 - start);
+    if (!targ)
+        targ = new Set(1, size);
+    targ.size(size);
+    return new Generator(i => start + i).into(targ);
 }
 
 class Generator {
@@ -28,15 +20,9 @@ class Generator {
         // TODO autoresize
         // TODO autoredim
         let raw = set.raw()[0];
-        let i = 0;
-        while (true) {
-            const output = this.fn(i);
-            if (output === undefined)
-                break;
-            raw[i] = output;
-            i++;
-            if (i >= raw.length)
-                break;
+        let fn = this.fn;
+        for (let i = 0; i < raw.length; i++) {
+            raw[i] = fn(i);
         }
         return set;
     }

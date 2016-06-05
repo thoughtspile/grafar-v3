@@ -7,11 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "test": "babel --presets es2015 src -d compiled & node compiled/tst.js"
+    "test": "babel --presets es2015 src -d compiled & node compiled/tst.js",
+    "bundle": "babel --presets es2015 src -d compiled & browserify compiled/time.js -o compiled/bundle.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.8.0"
+  },
+  "dependencies": {
+    "nanotimer": "^0.3.14"
   }
 }

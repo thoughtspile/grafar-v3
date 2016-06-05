@@ -13,7 +13,9 @@ class Buffer1d {
         if (_.isUndefined(newSize))
             return this._size;
 
-        this._data = new ctor(newSize);
+        if (newSize > this._size)
+            this._data = new ctor(newSize);
+                    
         this._size = newSize;
 
         return this;

@@ -3,6 +3,7 @@ import Set from './buffer-nd';
 import { map, each } from './transforms';
 import { ints, Generator } from './generators';
 import { cart, zip } from './combine';
+import Nanotimer from 'nanotimer';
 
 const log = console.log.bind(console);
 
@@ -55,3 +56,17 @@ each(step1, log);
 const step2 = cart([step1, int2], new Set(3));
 console.log('\nstep 2')
 each(step2, log);
+
+console.log('million ints:', new Nanotimer().time(() => ints(0, 1000000), '', 'u') / 1000, 'ms');
+let preMillion = ints(0, 1000000);
+console.log('million ints (preallocated):',
+    new Nanotimer().time(() => ints(0, 1000000, preMillion), '', 'u') / 1000, 'ms');
+
+console.log('million ints (preallocated, literal):',
+    new Nanotimer().time(() => {
+        let raw = preMillion.raw()[0];
+        let fn = i => i;
+        for (var i = 0; i < raw.length; i++) {
+            raw[i] = fn(i);
+        }
+    }, '', 'u') / 1000, 'ms');
