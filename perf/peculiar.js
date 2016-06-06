@@ -4,10 +4,10 @@ function gen (fn, set) {
 }
 
 var arr = new Float32Array(1000000);
-// var x = 0;
+var x = 0;
 var fn = function(i) { return 0; };
-var fn2 = function(i) { return 0; };
-// var fn2 = fn;
+// var fn2 = function(i) { return 0; };
+var fn2 = fn;
 
 
 // console.time('run1');

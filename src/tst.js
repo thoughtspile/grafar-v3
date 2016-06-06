@@ -1,7 +1,7 @@
 import Buffer1d from './buffer-1d';
 import Set from './buffer-nd';
 import { map, each } from './transforms';
-import { ints, Generator, plainGenerator } from './generators';
+import { ints, Generator } from './generators';
 import { cart, zip } from './combine';
 import Nanotimer from 'nanotimer';
 
@@ -56,26 +56,3 @@ each(step1, log);
 const step2 = cart([step1, int2], new Set(3));
 console.log('\nstep 2')
 each(step2, log);
-
-// console.log('million ints:', new Nanotimer().time(() => ints(0, 1000000), '', 'u') / 1000, 'ms');
-// console.log('million ints (preallocated):',
-//     new Nanotimer().time(() => ints(0, 1000000, preMillion), '', 'u') / 1000, 'ms');
-let preMillion = ints(0, 1000000);
-const genfn = i => 0 + i;
-console.log('million ints (preallocated, nowrap):',
-    new Nanotimer().time(() => {
-        Generator.into(genfn, preMillion);
-    }, '', 'u') / 1000, 'ms');
-console.log('million ints (preallocated, plain):',
-    new Nanotimer().time(() => {
-        plainGenerator(genfn, preMillion);
-    }, '', 'u') / 1000, 'ms');
-console.log('million ints (preallocated, literal):',
-    new Nanotimer().time(() => {
-        (function(fn) {
-            let raw = preMillion.raw()[0];
-            for (var i = 0; i < raw.length; i++) {
-                raw[i] = fn(i);
-            }
-        }( genfn ))
-    }, '', 'u') / 1000, 'ms');
