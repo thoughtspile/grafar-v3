@@ -24,5 +24,5 @@ let buff = ints(0, 1000000);
 bunch('ints', () => ints(20, 1000020, buff));
 bunch('custom gen', () => Generator.into(i => i + 2, buff));
 let val = 0;
-const gen = new Generator(i => i / val);
+const gen = new Generator(i => i + val);
 bunch('prepared', () => { val++; gen.into(buff); });
