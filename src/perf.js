@@ -8,7 +8,7 @@ const time = (fn) => {
     fn();
     return mus.since(start) / 1000;
 };
-const N = 100;
+const N = 2;
 const bunch = (header, fn, each) => {
     let sum = 0;
     for (var i = 0; i < N; i++) {
