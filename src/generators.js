@@ -8,19 +8,12 @@ function ints(start, end, targ) {
     if (!targ)
         targ = new Set(1, size);
     targ.size(size);
-    return new Generator(i => start + i).into(targ);
+    return Generator.into(i => start + 1, targ);
 }
 
-class Generator {
-    // fn(state) returns value or undefined
-    constructor(fn) {
-        this.fn = fn;
-    }
-    into(set) {
-        // TODO autoresize
-        // TODO autoredim
+const Generator =  {
+    into: function(fn, set) {
         let raw = set.raw()[0];
-        let fn = this.fn;
         for (let i = 0; i < raw.length; i++) {
             raw[i] = fn(i);
         }
@@ -28,8 +21,17 @@ class Generator {
     }
 }
 
+function plainGenerator(fn, set) {
+    let raw = set.raw()[0];
+    for (let i = 0; i < raw.length; i++) {
+        raw[i] = fn(i);
+    }
+    return set;
+}
+
 
 export {
     ints,
-    Generator
+    Generator,
+    plainGenerator
 };

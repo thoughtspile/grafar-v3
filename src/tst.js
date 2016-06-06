@@ -1,7 +1,7 @@
 import Buffer1d from './buffer-1d';
 import Set from './buffer-nd';
 import { map, each } from './transforms';
-import { ints, Generator } from './generators';
+import { ints, Generator, plainGenerator } from './generators';
 import { cart, zip } from './combine';
 import Nanotimer from 'nanotimer';
 
@@ -21,8 +21,8 @@ console.log(set2d, set2d.size());
 set2d.size(3);
 console.log(set2d, set2d.size());
 
-let comp1 = new Generator(i => i + 1, 0).into(new Set(1, 3));
-let comp2 = new Generator(i => 10 * (i + 1), 0).into(new Set(1, 3));
+let comp1 = Generator.into(i => i + 1, new Set(1, 3));
+let comp2 = Generator.into(i => 10 * (i + 1), new Set(1, 3));
 zip([comp1, comp2], set2d);
 console.log('zip: ', comp1.raw(), comp2.raw(), set2d.raw());
 
@@ -57,16 +57,25 @@ const step2 = cart([step1, int2], new Set(3));
 console.log('\nstep 2')
 each(step2, log);
 
-console.log('million ints:', new Nanotimer().time(() => ints(0, 1000000), '', 'u') / 1000, 'ms');
+// console.log('million ints:', new Nanotimer().time(() => ints(0, 1000000), '', 'u') / 1000, 'ms');
+// console.log('million ints (preallocated):',
+//     new Nanotimer().time(() => ints(0, 1000000, preMillion), '', 'u') / 1000, 'ms');
 let preMillion = ints(0, 1000000);
-console.log('million ints (preallocated):',
-    new Nanotimer().time(() => ints(0, 1000000, preMillion), '', 'u') / 1000, 'ms');
-
+const genfn = i => 0 + i;
+console.log('million ints (preallocated, nowrap):',
+    new Nanotimer().time(() => {
+        Generator.into(genfn, preMillion);
+    }, '', 'u') / 1000, 'ms');
+console.log('million ints (preallocated, plain):',
+    new Nanotimer().time(() => {
+        plainGenerator(genfn, preMillion);
+    }, '', 'u') / 1000, 'ms');
 console.log('million ints (preallocated, literal):',
     new Nanotimer().time(() => {
-        let raw = preMillion.raw()[0];
-        let fn = i => i;
-        for (var i = 0; i < raw.length; i++) {
-            raw[i] = fn(i);
-        }
+        (function(fn) {
+            let raw = preMillion.raw()[0];
+            for (var i = 0; i < raw.length; i++) {
+                raw[i] = fn(i);
+            }
+        }( genfn ))
     }, '', 'u') / 1000, 'ms');
