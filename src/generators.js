@@ -5,12 +5,18 @@ import Set from './buffer-nd';
 const gens = {
     int: (function() {
         var start = 0;
+        const fn = i => start + i;
+        const gen = mkGen();
+
         return {
             setup: function(obj) {
                 start = obj.start;
                 return this;
             },
-            fn: i => start + i
+            into: function into(set) {
+                gen(fn, set.raw()[0], set.size());
+                return set;
+            }
         };
     }())
 };
@@ -21,18 +27,22 @@ const ints = (function() {
         const size = Math.abs(Math.floor(end) + 1 - start);
         targ = targ ? targ.size(size) : new Set(1, size);
 
-        return Generator.into(gens.int.setup({ start }).fn, targ);
+        return gens.int.setup({ start }).into(targ);
     };
 }());
 
 const Generator =  {
     into: function(fn, set) {
-        let raw = set.raw()[0];
-        for (let i = 0; i < raw.length; i++) {
-            raw[i] = fn(i);
-        }
+        mkGen()(fn, set.raw()[0], set.size());
         return set;
     }
+}
+
+function mkGen() {
+    // seed prevents inlining
+    const seed = Math.floor(Math.random() * 10000);
+    return Function(['fn', 'raw', 'size'],
+        `${seed}; for (var i = 0; i < size; i++) raw[i] = fn(i);`);
 }
 
 

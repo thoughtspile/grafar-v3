@@ -9,6 +9,9 @@ const time = (fn) => {
 
 
 let buff = ints(0, 1000000);
-const genfn = i => 0 + i;
-console.log('million ints: ',
-    time(() => ints(20, 1000020, buff)), 'ms');
+for (var i = 0; i < 10; i++) {
+    console.log(`ints, take  ${i}:`, time(() => ints(20, 1000020, buff)));
+}
+for (var i = 0; i < 10; i++) {
+    console.log(`custom gen  ${i}:`, time(() => Generator.into(i => i + 2, buff)));
+}
