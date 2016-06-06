@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "babel --presets es2015 src -d compiled & node compiled/tst.js",
-    "bundle": "babel --presets es2015 src -d compiled & browserify compiled/perf.js -o compiled/bundle.js",
+    "bundle": "babel --presets es2015 src -d compiled & browserify compiled/demo--canvas.js -o compiled/bundle.js",
     "c": "babel --presets es2015 src -d compiled"
   },
   "author": "",
