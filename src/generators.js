@@ -35,14 +35,23 @@ const Generator =  {
     into: function(fn, set) {
         mkGen()(fn, set.raw()[0], set.size());
         return set;
+    },
+    meta: function(expr, set) {
+        mkGenMeta(expr)(set.raw()[0], set.size());
+        return set;
     }
 }
 
 function mkGen() {
-    // seed prevents inlining
+    // seed prevents premature inlining
     const seed = Math.floor(Math.random() * 10000);
     return Function(['fn', 'raw', 'size'],
         `${seed}; for (var i = 0; i < size; i++) raw[i] = fn(i);`);
+}
+
+function mkGenMeta(expr) {
+    return Function(['raw', 'size'],
+        `for (var i = 0; i < size; i++) raw[i] = ${expr};`);
 }
 
 

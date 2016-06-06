@@ -1,17 +1,26 @@
 import Set from './buffer-nd';
 import { ints, Generator } from './generators';
-import Nanotimer from 'nanotimer';
+import mus from 'microseconds';
 
 
 const time = (fn) => {
-    return new Nanotimer().time(fn, '', 'u') / 1000;
+    const start = mus.now();
+    fn();
+    return mus.since(start) / 1000;
+};
+const N = 100;
+const bunch = (header, fn, each) => {
+    let sum = 0;
+    for (var i = 0; i < N; i++) {
+        const ms = time(fn);
+        sum += ms;
+        if (each) console.log(header, i, ':', ms);
+    }
+    console.log(header, ' AVG:', sum / N, '\n');
 };
 
-
 let buff = ints(0, 1000000);
-for (var i = 0; i < 10; i++) {
-    console.log(`ints, take  ${i}:`, time(() => ints(20, 1000020, buff)));
-}
-for (var i = 0; i < 10; i++) {
-    console.log(`custom gen  ${i}:`, time(() => Generator.into(i => i + 2, buff)));
-}
+
+bunch('ints', () => ints(20, 1000020, buff));
+bunch('custom gen', () => Generator.into(i => i + 2, buff));
+bunch('custom meta', () => Generator.meta('i + 2', buff));
