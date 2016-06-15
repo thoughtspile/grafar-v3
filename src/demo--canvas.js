@@ -21,6 +21,14 @@ let ix = cart([i, x]);
 let fn = [(i, x) => 200 + 200 * Math.sin(Math.sin(t * i) + Math.cos(i + x / 20))];
 let y = new Set(1);
 
+const colors = [
+    '#0000ff',
+    '#000088',
+    '#000000',
+    '#880000',
+    '#ff0000'
+];
+
 (function update() {
     t += .01;
     cart([i, x], ix);
@@ -29,7 +37,10 @@ let y = new Set(1);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let xy = zip([ix, y]);
     let start = mus.now();
-    xy.each((i, x, y) => ctx.fillRect(x, y, 1, 1));
+    xy.each((i, x, y) => {
+        ctx.fillStyle = colors[i + 2];
+        ctx.fillRect(x, y, 1, 1);
+    });
     console.log(mus.since(start) / 1000);
 
     requestAnimationFrame(update);
