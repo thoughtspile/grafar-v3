@@ -1,3 +1,5 @@
+- nd generators
+- topology support
 - stateful generators: f(state) -> number
     - how to go about nd-generators?
 - discrete filters: f(...) -> boolean
@@ -13,5 +15,4 @@
 - 0+0 is to support booleans
 - polyline optimization
 - mesh optimization
-- nd generators
 - prepared map / each

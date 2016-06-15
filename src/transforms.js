@@ -44,8 +44,7 @@ function nCall(nargs) {
 function map(src, fn, targ) {
     if (!Array.isArray(fn))
         fn = [fn];
-    if (_.isUndefined(targ))
-        targ = new Set(fn.length, src.size());
+    targ = (targ || new Set(fn.length, src.size())).size(src.size());
     const compiled = compileMap(fn);
     compiled(src.raw(), targ.raw());
     return targ;
